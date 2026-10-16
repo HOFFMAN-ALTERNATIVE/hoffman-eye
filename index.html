@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+<html lang="ru"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Orbitron:wght@700;900&display=swap" rel="stylesheet">
+<title>HOFFMAN // EYE</title>
+<style>
+:root{--edge:#3af;--glitch:#0ff;--acc:#f0f;--pip:#3f8;--bg:#02040a;--deep:1;transition:all 2s}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%;overflow:hidden;background:var(--bg);color:#cfe;font-family:"Share Tech Mono","Courier New",monospace}
+#scene{position:fixed;inset:0;perspective:900px;overflow:hidden}
+.layer{position:absolute;inset:-6%;transition:transform .15s ease-out}
+#far{background:radial-gradient(circle at 50% 40%,#0a1a2a,#000);background-size:cover;background-position:center;filter:saturate(1.2)}
+#mid{pointer-events:none;mix-blend-mode:screen}
+#mid canvas{width:100%;height:100%;opacity:.35}
+#mid::after{content:"";position:absolute;inset:0;background:repeating-linear-gradient(0deg,rgba(0,0,0,.35) 0 1px,transparent 1px 3px)}
+#vig{position:fixed;inset:0;pointer-events:none;background:radial-gradient(ellipse at center,transparent calc(60% - var(--deep)*15%),rgba(0,0,0,.95));box-shadow:inset 0 0 120px var(--edge);opacity:.9;transition:all 1s}
+#near{inset:0;display:flex;flex-direction:column;align-items:center;justify-content:space-between;padding:2vh 2vw;overflow-y:auto}
+header{text-align:center}
+h1{font-size:clamp(20px,4vw,44px);letter-spacing:.3em;color:var(--glitch);text-shadow:2px 0 var(--acc),-2px 0 var(--edge);animation:gl 3s infinite}
+@keyframes gl{0%,92%,100%{transform:none}93%{transform:translate(3px,-1px) skewX(8deg)}95%{transform:translate(-3px,1px)}}
+.sub{font-size:11px;opacity:.7;letter-spacing:.2em;margin:.4em 0 1em}
+button,.btn{background:transparent;border:1px solid var(--glitch);color:var(--glitch);padding:.7em 1.6em;font-family:"Share Tech Mono",monospace;font-size:inherit;letter-spacing:.2em;cursor:pointer;border-radius:10px;box-shadow:0 0 12px var(--glitch) inset,0 0 12px var(--glitch);text-transform:uppercase}
+button:hover,.btn:hover{background:var(--glitch);color:#000}
+#eye{position:relative;width:min(70vw,420px);aspect-ratio:1;margin:2vh auto;transform-style:preserve-3d}
+.face{position:absolute;left:50%;top:50%;width:50%;height:50%;transform-origin:0 0;clip-path:polygon(0 0,100% 30%,30% 100%);background:linear-gradient(135deg,color-mix(in srgb,var(--edge) 40%,transparent),transparent);border:0;cursor:pointer;transition:transform .4s,filter .4s;filter:drop-shadow(0 0 6px var(--glitch))}
+.face span{position:absolute;left:22%;top:22%;font-size:11px;letter-spacing:.15em;color:#fff;text-shadow:0 0 6px var(--acc)}
+.face::before{content:"";position:absolute;inset:0;background:linear-gradient(90deg,transparent,var(--acc),transparent);opacity:.25;animation:sh 2.5s linear infinite}
+@keyframes sh{from{transform:translateX(-100%)}to{transform:translateX(100%)}}
+.face:hover,.face.on{filter:drop-shadow(0 0 14px var(--acc)) brightness(1.5)}
+#iris{position:absolute;left:50%;top:50%;width:22%;aspect-ratio:1;transform:translate(-50%,-50%);border-radius:50%;background:radial-gradient(circle,#000 30%,var(--glitch) 32%,var(--edge) 55%,transparent 70%);box-shadow:0 0 40px var(--glitch);animation:pulse 4s infinite}
+@keyframes pulse{50%{transform:translate(-50%,-50%) scale(1.12)}}
+#dossier{width:min(96vw,760px);border-top:1px solid var(--edge);border-bottom:1px solid var(--edge);background:rgba(0,10,15,.55);backdrop-filter:blur(3px);padding:1em;border-radius:12px}
+.pane{display:none}.pane.on{display:grid;gap:.6em}
+label{font-size:11px;color:var(--pip);letter-spacing:.2em}
+input,textarea{width:100%;background:rgba(0,0,0,.5);border:1px solid color-mix(in srgb,var(--edge) 60%,transparent);color:#dff;font-family:"Share Tech Mono",monospace;font-size:inherit;padding:.5em;border-radius:8px}
+textarea{min-height:70px}
+.case{font-size:13px;line-height:1.7;white-space:pre-wrap;color:var(--pip)}
+.case img{max-width:120px;float:right;border:1px solid var(--acc);filter:contrast(1.3) hue-rotate(60deg)}
+.hud{position:fixed;font-size:10px;letter-spacing:.15em;opacity:.7;color:var(--glitch);pointer-events:none}
+#tl{top:8px;left:10px}#tr{top:8px;right:10px;text-align:right}#bl{bottom:8px;left:10px}
+body.deep #vig{--deep:2.5}
+
+h1{position:relative;font-family:Orbitron,"Share Tech Mono",sans-serif;font-weight:900;font-size:clamp(26px,6vw,68px);animation:none}
+h1::before,h1::after{content:attr(data-t);position:absolute;inset:0;overflow:hidden}
+h1::before{color:var(--acc);animation:g1 2.4s infinite steps(1)}
+h1::after{color:var(--edge);animation:g2 3.1s infinite steps(1)}
+@keyframes g1{0%{clip-path:inset(10% 0 80% 0);transform:translate(-4px,0)}20%{clip-path:inset(60% 0 20% 0);transform:translate(4px,0)}40%{clip-path:inset(40% 0 45% 0);transform:translate(-2px,0)}60%,100%{clip-path:inset(100% 0 0 0);transform:none}}
+@keyframes g2{0%{clip-path:inset(70% 0 5% 0);transform:translate(4px,0)}25%{clip-path:inset(20% 0 65% 0);transform:translate(-4px,0)}50%,100%{clip-path:inset(100% 0 0 0);transform:none}}
+.side{position:fixed;top:50%;transform:translateY(-50%);width:min(22vw,260px);font-size:11px;line-height:1.55;letter-spacing:.08em;color:var(--pip);pointer-events:none;z-index:5}
+#lp{left:12px;border-left:1px solid var(--edge);padding-left:8px}
+#rp{right:12px;border-right:1px solid var(--edge);padding-right:8px;text-align:right}
+.side b{color:var(--glitch);font-weight:normal}.side .t{color:var(--acc);opacity:.85}
+#log{position:fixed;left:12px;bottom:28px;width:min(34vw,420px);height:9.5em;overflow:hidden;font-size:10.5px;line-height:1.5;color:var(--pip);opacity:.85;pointer-events:none;z-index:5}
+#coords{position:fixed;right:12px;bottom:28px;font-size:10.5px;color:var(--glitch);text-align:right;pointer-events:none;z-index:5;line-height:1.5}
+.cur::after{content:"█";animation:bl 1s steps(1) infinite;color:var(--glitch)}@keyframes bl{50%{opacity:0}}
+#scan{position:fixed;left:0;right:0;height:2px;background:linear-gradient(90deg,transparent,var(--glitch),transparent);box-shadow:0 0 12px var(--glitch);opacity:.5;animation:sc 6s linear infinite;pointer-events:none;z-index:6}
+@keyframes sc{from{top:-2px}to{top:100%}}
+.hud{z-index:6}#tc{top:8px;left:50%;transform:translateX(-50%);white-space:nowrap}
+.tick{position:fixed;top:24px;left:0;right:0;font-size:10px;color:var(--edge);opacity:.5;white-space:nowrap;overflow:hidden;pointer-events:none;z-index:5}
+.tick span{display:inline-block;animation:tk 40s linear infinite}@keyframes tk{from{transform:translateX(100vw)}to{transform:translateX(-100%)}}
+@media(max-width:800px){.side{display:none}#log{width:60vw;height:6em;font-size:9px}#coords{font-size:9px}}
+#near{padding-top:44px;padding-bottom:6em}
+
+/* SERIOUS OVERRIDES */
+body{background:radial-gradient(ellipse at 50% 30%,#06101a 0%,#010204 55%,#000 100%)}
+#far{background:radial-gradient(ellipse at 50% 35%,#07131d,#000 70%)}
+#far::after{content:"";position:absolute;inset:0;background:linear-gradient(transparent 49.9%,color-mix(in srgb,var(--edge) 12%,transparent) 50%,transparent 50.1%),linear-gradient(90deg,transparent 49.9%,color-mix(in srgb,var(--edge) 12%,transparent) 50%,transparent 50.1%);background-size:80px 80px;opacity:.35;mask:radial-gradient(circle at 50% 50%,#000 20%,transparent 75%)}
+h1{letter-spacing:.42em;font-weight:700;font-size:clamp(22px,4.6vw,54px);color:#e8fbff;text-shadow:0 0 18px color-mix(in srgb,var(--glitch) 60%,transparent)}
+.sub{color:color-mix(in srgb,var(--glitch) 70%,#fff);opacity:.6;font-size:10px;letter-spacing:.35em}
+button,.btn{border-radius:0;border:1px solid color-mix(in srgb,var(--glitch) 55%,transparent);box-shadow:0 0 10px color-mix(in srgb,var(--glitch) 25%,transparent);font-size:11px;letter-spacing:.3em;padding:.8em 1.8em;background:rgba(0,10,14,.4);color:#d8f7ff;position:relative}
+button:hover,.btn:hover{background:color-mix(in srgb,var(--glitch) 15%,transparent);color:#fff}
+button::before,.btn::before{content:"";position:absolute;left:-1px;top:-1px;width:8px;height:8px;border-left:1px solid var(--acc);border-top:1px solid var(--acc)}
+#eye{width:min(60vw,360px);perspective:900px;display:flex;align-items:center;justify-content:center}
+#pyr{position:relative;width:200px;height:170px;transform-style:preserve-3d;animation:spin 24s linear infinite}
+@keyframes spin{from{transform:rotateX(-14deg) rotateY(0)}to{transform:rotateX(-14deg) rotateY(360deg)}}
+.face{left:0;top:0;width:200px;height:170px;clip-path:polygon(50% 0,100% 100%,0 100%);transform-origin:50% 100%;border:0;filter:none;
+ background:linear-gradient(180deg,color-mix(in srgb,var(--glitch) 55%,#fff) 0%,color-mix(in srgb,var(--edge) 35%,#000) 45%,#010508 100%);opacity:.82}
+.face::after{content:"";position:absolute;inset:0;background:linear-gradient(115deg,transparent 40%,rgba(255,255,255,.25) 50%,transparent 60%);background-size:300% 100%;animation:sweep 5s linear infinite;mix-blend-mode:screen}
+@keyframes sweep{from{background-position:150% 0}to{background-position:-150% 0}}
+.face::before{opacity:.12}
+.f0{transform:rotateY(0deg) translateZ(100px) rotateX(30deg)}
+.f1{transform:rotateY(90deg) translateZ(100px) rotateX(30deg)}
+.f2{transform:rotateY(180deg) translateZ(100px) rotateX(30deg)}
+.f3{transform:rotateY(270deg) translateZ(100px) rotateX(30deg)}
+.face span{left:0;right:0;top:auto;bottom:16%;text-align:center;font-size:10px;letter-spacing:.4em;color:#eaffff;text-shadow:0 0 8px var(--glitch)}
+.face:hover,.face.on{opacity:1;filter:brightness(1.35) drop-shadow(0 0 10px var(--acc))}
+.base{position:absolute;left:0;top:70px;width:200px;height:200px;transform:rotateX(90deg) translateZ(-100px);background:radial-gradient(circle,color-mix(in srgb,var(--glitch) 35%,transparent),transparent 70%);box-shadow:0 0 60px color-mix(in srgb,var(--glitch) 40%,transparent);pointer-events:none}
+#iris{width:26px;background:radial-gradient(circle,#fff 0 18%,var(--glitch) 30%,transparent 70%);top:28%;box-shadow:0 0 30px var(--glitch),0 0 80px var(--acc);pointer-events:none}
+#dossier{border-radius:0;border:1px solid color-mix(in srgb,var(--edge) 35%,transparent);background:linear-gradient(180deg,rgba(2,10,14,.75),rgba(0,0,0,.85));box-shadow:0 0 30px rgba(0,0,0,.8),inset 0 0 20px color-mix(in srgb,var(--edge) 10%,transparent)}
+input,textarea{border-radius:0;border:0;border-bottom:1px solid color-mix(in srgb,var(--edge) 45%,transparent);background:rgba(0,0,0,.35)}
+input:focus,textarea:focus{outline:0;border-bottom-color:var(--acc);box-shadow:0 6px 12px -8px var(--acc)}
+.side,#log{color:color-mix(in srgb,var(--pip) 55%,#bfe)}
+.side b{text-shadow:0 0 6px color-mix(in srgb,var(--glitch) 50%,transparent)}
+#grain{position:fixed;inset:0;width:100%;height:100%;pointer-events:none;z-index:7;opacity:.09;mix-blend-mode:screen}
+#lines{position:fixed;inset:0;pointer-events:none;z-index:7;background:repeating-linear-gradient(0deg,rgba(0,0,0,.28) 0 1px,transparent 1px 3px);animation:fl 7s infinite}
+@keyframes fl{0%,97%,100%{opacity:1}98%{opacity:.85}}
+#mid canvas{opacity:.12}
+#vig{box-shadow:inset 0 0 160px rgba(0,0,0,.95),inset 0 0 2px color-mix(in srgb,var(--edge) 50%,transparent)}
+.frame{position:fixed;width:28px;height:28px;border:1px solid color-mix(in srgb,var(--glitch) 50%,transparent);pointer-events:none;z-index:6}
+.fa{top:40px;left:6px;border-right:0;border-bottom:0}.fb{top:40px;right:6px;border-left:0;border-bottom:0}.fc{bottom:6px;left:6px;border-right:0;border-top:0}.fd{bottom:6px;right:6px;border-left:0;border-top:0}
+
+#brand,#tabs{display:none}
+.mark{width:34px;height:34px;border-radius:10px;display:grid;place-items:center;background:radial-gradient(circle at 50% 60%,color-mix(in srgb,var(--acc) 35%,#000),#05070c);border:1px solid var(--acc);box-shadow:0 0 12px color-mix(in srgb,var(--acc) 50%,transparent)}
+.mark svg{width:22px;height:22px}
+@media (orientation:portrait) and (max-width:900px){
+ .side,#tc,.tick{display:none!important}
+ #scene{perspective:none}
+ #near{display:flex;flex-direction:column;min-height:100dvh;padding:calc(64px + env(safe-area-inset-top)) 14px calc(16px + env(safe-area-inset-bottom));gap:14px;overflow-y:auto}
+ #brand{display:flex;align-items:center;gap:10px;position:fixed;top:0;left:0;right:0;z-index:50;padding:calc(10px + env(safe-area-inset-top)) 14px 10px;background:linear-gradient(#05070cee,#05070c99);backdrop-filter:blur(14px);border-bottom:1px solid color-mix(in srgb,var(--acc) 25%,transparent)}
+ #brand .nm{font-family:Orbitron,sans-serif;font-weight:700;font-size:15px;letter-spacing:.08em;color:#eaffff;line-height:1.1}
+ #brand .nm small{display:block;font-family:'Share Tech Mono',monospace;font-weight:400;font-size:9px;letter-spacing:.25em;color:var(--acc);opacity:.8}
+ #brand .st{margin-left:auto;font:10px 'Share Tech Mono',monospace;color:var(--acc)}
+ #brand .st::before{content:"";display:inline-block;width:7px;height:7px;border-radius:50%;background:var(--acc);margin-right:6px;box-shadow:0 0 8px var(--acc);animation:bl 1.4s infinite}
+ header{position:static!important;transform:none!important;text-align:left}
+ header h1{font-size:clamp(24px,8vw,34px)!important}
+ header .sub{font-size:10px}
+ header button,header .btn{display:block;width:100%;margin:.5em 0 0!important;padding:12px;font-size:11px}
+ #eye{position:relative!important;inset:auto!important;left:auto!important;top:auto!important;transform:scale(.6)!important;margin:-40px auto;height:220px}
+ #tabs{display:flex;flex-direction:column;gap:6px}
+ #tabs .h{font:10px 'Share Tech Mono',monospace;letter-spacing:.25em;color:var(--acc);opacity:.7;padding:4px 6px}
+ .tab{display:flex;align-items:center;gap:12px;padding:11px 12px;border-radius:14px;background:#0a0f18cc;border:1px solid #ffffff12;color:#dfefff;font-family:'Share Tech Mono',monospace;text-align:left;cursor:pointer;transition:.2s}
+ .tab i{width:32px;height:32px;border-radius:10px;display:grid;place-items:center;font-style:normal;font-size:13px;background:color-mix(in srgb,var(--acc) 18%,#000);border:1px solid color-mix(in srgb,var(--acc) 45%,transparent);color:var(--acc)}
+ .tab b{display:block;font-size:13px;font-weight:400;letter-spacing:.08em}
+ .tab small{display:block;font-size:10px;opacity:.55;margin-top:2px}
+ .tab em{margin-left:auto;font-style:normal;font-size:9px;opacity:.5}
+ .tab.on{background:color-mix(in srgb,var(--acc) 14%,#0a0f18);border-color:var(--acc);box-shadow:0 0 14px color-mix(in srgb,var(--acc) 30%,transparent)}
+ #dossier{position:static!important;transform:none!important;width:auto!important;max-width:none!important;border-radius:14px}
+ #log{position:static!important;width:auto!important;height:7em!important;border-radius:12px}
+ #dossier input,#dossier textarea{font-size:16px}
+}
+@keyframes bl{50%{opacity:.2}}
+</style></head><body>
+<div id="brand"><div class="mark"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" style="color:var(--acc)" stroke-width="1.6"><path d="M12 3 21 20H3Z"/><circle cx="12" cy="14" r="2.6"/><path d="M12 3v8.4"/></svg></div><div class="nm">Hoffman Alternative<small>HUMAN ⇄ AI · EYE</small></div><div class="st">ONLINE</div></div>
+<div id="scene">
+ <div class="layer" id="far"></div>
+ <div class="layer" id="mid"><canvas id="noise" width="320" height="180"></canvas></div>
+ <div class="layer" id="near">
+  <header>
+   <h1 data-t="HOFFMAN // EYE">HOFFMAN // EYE</h1>
+   <div class="sub">INTEGRATION: HUMAN ⇄ AI · ЭКРАН — ПРОДОЛЖЕНИЕ ГЛАЗ</div>
+   <button id="dive">INITIATE IMMERSION · ПОГРУЖЕНИЕ</button>
+   <label class="btn" style="margin-left:.5em">LOAD OPTIC FEED · ФОН<input type="file" id="bgfile" accept="image/*" hidden></label>
+  </header>
+  <div id="eye">
+   <div id="pyr"><div class="face f0" data-t="0"><span>ИМЯ</span></div>
+   <div class="face f1" data-t="1"><span>ФОТО</span></div>
+   <div class="face f2" data-t="2"><span>БИО</span></div>
+   <div class="face f3" data-t="3"><span>ДОСЬЕ</span></div>
+   <div class="base"></div></div><div id="iris"></div>
+  </div>
+  <nav id="tabs"><div class="h">// DOSSIER CHANNELS</div>
+   <button class="tab on" data-t="0"><i>01</i><span><b>ИМЯ · IDENTITY</b><small>Имя и интересы субъекта</small></span><em>NOW</em></button>
+   <button class="tab" data-t="1"><i>02</i><span><b>ФОТО · OPTIC</b><small>Загрузить портрет</small></span><em>IMG</em></button>
+   <button class="tab" data-t="2"><i>03</i><span><b>БИО · MEMORY</b><small>Биография, заметки</small></span><em>TXT</em></button>
+   <button class="tab" data-t="3"><i>04</i><span><b>ДОСЬЕ · CASE FILE</b><small>Сводный профиль</small></span><em>SYS</em></button>
+  </nav>
+  <section id="dossier">
+   <div class="pane on" data-p="0"><label>SUBJECT NAME / ИМЯ</label><input id="fname" placeholder="Herman Hoffman"><label>INTERESTS / ИНТЕРЕСЫ</label><input id="fint" placeholder="AI, cyberpunk, photo"></div>
+   <div class="pane" data-p="1"><label>SUBJECT PHOTO / ФОТО</label><input type="file" id="fphoto" accept="image/*"></div>
+   <div class="pane" data-p="2"><label>BIO / БИОГРАФИЯ</label><textarea id="fbio" placeholder="..."></textarea></div>
+   <div class="pane" data-p="3"><div class="case" id="case"></div></div>
+  </section>
+ </div>
+</div>
+<div id="scan"></div>
+<div class="tick"><span id="tick"></span></div>
+<div class="hud" id="tc">[ SCANNING FIELD OF VIEW · ПОЛЕ ЗРЕНИЯ 180° ]</div>
+<div class="side" id="lp">
+<div class="t">// CORE STATUS</div>
+<div class="gl">SYSTEM ............ <b>ONLINE</b></div>
+<div class="gl">NEURAL LINK ....... <b>ACTIVE</b></div>
+<div>IDENTITY .......... <b id="idn">UNKNOWN</b></div>
+<div class="gl">LOCATION .......... <b>UNKNOWN</b></div>
+<div class="gl">THREAT LEVEL ...... <b id="thr">NOMINAL</b></div>
+<div>MEMORY ............ <b id="mem">87%</b></div>
+<div class="gl">UPLINK ............ <b>STABLE</b></div>
+<div>CORTEX TEMP ....... <b id="tmp">36.6°C</b></div>
+<br><div class="t">// OPTIC MODULE</div>
+<div class="gl">RETINA MAP ........ <b>LOCKED</b></div>
+<div>IRIS FOCUS ........ <b id="foc">0.00</b></div>
+<div class="gl">SPECTRUM .......... <b>IR/UV/VIS</b></div>
+<div class="cur">AWAITING INPUT </div>
+</div>
+<div class="side" id="rp">
+<div class="t">БИОМЕТРИЯ //</div>
+<div>ПУЛЬС <b id="bpm">72</b> BPM</div>
+<div class="gl">СИНАПСЫ <b>SYNC</b></div>
+<div>ИИ-СЛИЯНИЕ <b id="syn">64.2%</b></div>
+<div class="gl">ИМПЛАНТ <b>HX-09 OK</b></div>
+<br><div class="t">ENV //</div>
+<div class="gl">SIGNAL <b>-42 dBm</b></div>
+<div>PACKETS <b id="pk">0</b></div>
+<div class="gl">ENCRYPTION <b>AES-256</b></div>
+<div class="gl">FIREWALL <b>ARMED</b></div>
+<br><div class="t">PROTOCOL //</div>
+<div class="gl">OBSERVE · ANALYZE</div><div class="gl">REMEMBER · ADAPT</div>
+</div>
+<div id="log"></div>
+<div id="coords"></div>
+<div id="vig"></div><canvas id="grain" width="256" height="256"></canvas><div id="lines"></div><div class="frame fa"></div><div class="frame fb"></div><div class="frame fc"></div><div class="frame fd"></div>
+<div class="hud" id="tl">EYE.SYS v0.9 // ONLINE</div><div class="hud" id="tr"></div><div class="hud" id="bl">ARCHITECT HERMAN HOFFMAN // HUD v1.0</div>
+<script>
+const $=s=>document.querySelector(s),R=document.documentElement;
+// palette by time
+function pal(){const h=new Date().getHours();let p;
+ if(h>=5&&h<11)p=['#39f','#0ef','#6af','#020814','MORNING · ОКО ДРЕМЛЕТ'];
+ else if(h<17)p=['#0cf','#3f8','#f0f','#02060a','DAY · ОКО НАБЛЮДАЕТ'];
+ else if(h<22)p=['#f60','#f36','#f0f','#0a0306','EVENING · ОКО ПРОСЫПАЕТСЯ'];
+ else p=['#f03','#f22','#f09','#0a0002','NIGHT · ОКО БОДРСТВУЕТ'];
+ ['--edge','--glitch','--acc','--bg'].forEach((v,i)=>R.style.setProperty(v,p[i]));
+ $('#tr').textContent=new Date().toLocaleTimeString('ru-RU')+' // '+p[4];}
+pal();setInterval(pal,1000);
+// parallax
+let deep=1,tx=0,ty=0;
+function tilt(x,y){tx=x;ty=y;const d=[6,14,26];
+ $('#far').style.transform=`translate(${-x*d[0]*deep}px,${-y*d[0]*deep}px) scale(1.05)`;
+ $('#mid').style.transform=`translate(${-x*d[1]*deep}px,${-y*d[1]*deep}px)`;
+ $('#near').style.transform=`rotateY(${x*4*deep}deg) rotateX(${-y*4*deep}deg) translateZ(${(deep-1)*30}px)`;
+ $('#eye').style.transform=`rotateY(${x*18*deep}deg) rotateX(${-y*12*deep}deg)`;}
+addEventListener('pointermove',e=>tilt(e.clientX/innerWidth*2-1,e.clientY/innerHeight*2-1));
+addEventListener('deviceorientation',e=>{if(e.gamma!=null)tilt(Math.max(-1,Math.min(1,e.gamma/30)),Math.max(-1,Math.min(1,(e.beta-45)/30)))});
+$('#dive').onclick=()=>{deep=deep>1?1:2.2;document.body.classList.toggle('deep',deep>1);$('#dive').textContent=deep>1?'TERMINATE IMMERSION · ВЫХОД':'INITIATE IMMERSION · ПОГРУЖЕНИЕ';tilt(tx,ty);
+ if(window.DeviceOrientationEvent&&DeviceOrientationEvent.requestPermission)DeviceOrientationEvent.requestPermission().catch(()=>{});};
+// noise layer
+const nc=$('#noise'),nx=nc.getContext('2d');
+(function nz(){const im=nx.createImageData(320,180),d=im.data;for(let i=0;i<d.length;i+=4){const v=Math.random()*255|0;d[i]=d[i+1]=d[i+2]=v;d[i+3]=60}
+ for(let k=0;k<3;k++){const y=Math.random()*180|0;for(let x=0;x<320;x++){const j=(y*320+x)*4;d[j]=0;d[j+1]=255;d[j+2]=255;d[j+3]=200}}
+ nx.putImageData(im,0,0);setTimeout(()=>requestAnimationFrame(nz),70)})();
+// cyberpunk processing
+let lastBg=null;
+function cyber(img){const W=Math.min(1600,img.width),H=img.height*W/img.width,c=document.createElement('canvas');c.width=W;c.height=H;const x=c.getContext('2d');
+ x.filter='blur(2px) contrast(1.3) saturate(1.4)';x.drawImage(img,0,0,W,H);x.filter='none';
+ const s=x.getImageData(0,0,W,H),o=x.createImageData(W,H),a=s.data,b=o.data,sh=Math.max(4,W/150|0);
+ for(let y=0;y<H;y++)for(let i=0;i<W;i++){const k=(y*W+i)*4,kr=(y*W+Math.min(W-1,i+sh))*4,kb=(y*W+Math.max(0,i-sh))*4,n=(Math.random()-.5)*50;
+  const g=a[k+1];b[k]=a[kr]*.7+n;b[k+1]=g*.9+30+n;b[k+2]=a[kb+2]*.8+n;b[k+3]=255;}
+ x.putImageData(o,0,0);
+ for(let t=0;t<28;t++){const bh=4+Math.random()*30|0,by=Math.random()*H|0,dx=(Math.random()-.5)*W*.15|0;x.drawImage(c,0,by,W,bh,dx,by,W,bh);
+  if(Math.random()<.3){x.fillStyle=`rgba(${Math.random()<.5?'255,0,255':'0,255,255'},.25)`;x.fillRect(0,by,W,bh)}}
+ x.fillStyle='rgba(0,0,0,.25)';for(let y=0;y<H;y+=3)x.fillRect(0,y,W,1);
+ return c.toDataURL('image/jpeg',.85);}
+function loadImg(f,cb){const r=new FileReader();r.onload=()=>{const i=new Image();i.onload=()=>cb(i,r.result);i.src=r.result};r.readAsDataURL(f)}
+$('#bgfile').onchange=e=>{const f=e.target.files[0];if(!f)return;loadImg(f,i=>{lastBg=cyber(i);$('#far').style.backgroundImage=`url(${lastBg})`;e.target.value=''})};
+// tabs
+document.querySelectorAll('.face').forEach(f=>f.onclick=()=>{const t=f.dataset.t;
+ document.querySelectorAll('.face').forEach(z=>z.classList.toggle('on',z===f));
+ document.querySelectorAll('.pane').forEach(p=>p.classList.toggle('on',p.dataset.p===t));if(t==='3')dossier();});
+let photo='';$('#fphoto').onchange=e=>{const f=e.target.files[0];if(f)loadImg(f,i=>photo=cyber(i))};
+function dossier(){const v=id=>$(id).value.trim()||'[REDACTED]';
+ $('#case').innerHTML=(photo?`<img src="${photo}">`:'')+`CASE FILE #${(Date.now()%1e6).toString(16).toUpperCase()}\nSTATUS ......... OBSERVED BY EYE\nSUBJECT ........ ${esc(v('#fname'))}\nINTERESTS ...... ${esc(v('#fint'))}\nBIO ............ ${esc(v('#fbio'))}\nSYNC HUMAN⇄AI .. ${(60+Math.random()*39).toFixed(1)}%`;}
+const esc=s=>s.replace(/[&<>]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;'}[c]));
+
+// living HUD
+const L=["> boot sequence initiated...","> loading kernel EYE.SYS v0.9","> mounting optic cortex ........ OK","> neural link handshake ......... OK","> calibrating retina map ........ OK","> syncing human ⇄ AI layer ...... OK","> scanning environment ..........","> faces detected: 0 · objects: ?","> uplink stable · latency 12ms","> memory defrag ................. 87%","> anomaly check ................. CLEAN","> паттерн поведения обновлён","> око видит всё. наблюдение продолжается","> waiting for subject input_"];
+let li=0;const lg=$('#log');
+function typeLine(){const t=L[li%L.length]+(li>=L.length?' ['+(Date.now()%9999)+']':'');li++;const d=document.createElement('div');d.className='cur';lg.appendChild(d);
+ lg.querySelectorAll('div').forEach(x=>{if(x!==d)x.classList.remove('cur')});while(lg.children.length>7)lg.firstChild.remove();
+ let i=0;(function ty(){d.textContent=t.slice(0,++i);if(i<t.length)setTimeout(ty,18+Math.random()*30);else setTimeout(typeLine,600+Math.random()*1400)})();}
+typeLine();
+const G='!<>-_\\/[]{}=+*^?#01';
+setInterval(()=>{const els=document.querySelectorAll('.gl'),e=els[Math.random()*els.length|0];if(!e||e.dataset.o)return;const o=e.innerHTML;e.dataset.o=1;
+ const tn=[...e.childNodes].find(n=>n.nodeType===3&&n.textContent.trim());if(!tn){delete e.dataset.o;return}const ot=tn.textContent,a=[...ot];
+ for(let k=0;k<3;k++){const j=Math.random()*a.length|0;if(a[j]!==' ')a[j]=G[Math.random()*G.length|0]}tn.textContent=a.join('');
+ setTimeout(()=>{tn.textContent=ot;delete e.dataset.o},120);},260);
+let pk=0;setInterval(()=>{pk+=Math.random()*400|0;$('#pk').textContent=pk;$('#mem').textContent=(84+Math.random()*6).toFixed(0)+'%';
+ $('#bpm').textContent=68+Math.random()*10|0;$('#syn').textContent=(60+Math.random()*30).toFixed(1)+'%';$('#tmp').textContent=(36.4+Math.random()*.6).toFixed(1)+'°C';
+ $('#thr').textContent=Math.random()<.06?'ELEVATED':'NOMINAL';$('#foc').textContent=Math.hypot(tx,ty).toFixed(2);
+ $('#idn').textContent=($('#fname').value.trim()||'UNKNOWN').toUpperCase();
+ $('#coords').innerHTML=`X:${(tx*1000).toFixed(0).padStart(5)} Y:${(ty*1000).toFixed(0).padStart(5)}<br>AZ ${(tx*90).toFixed(1)}° · EL ${(-ty*45).toFixed(1)}°<br>DEPTH ×${deep.toFixed(1)} · FPS 60<br>ARCHITECT HERMAN HOFFMAN`;},700);
+$('#tick').textContent=('◆ SYSTEM ONLINE ◆ NEURAL LINK: ACTIVE ◆ LOCATION: UNKNOWN ◆ THREAT LEVEL: NOMINAL ◆ UPLINK: STABLE ◆ ОКО ВИДИТ ВСЁ ◆ HUMAN ⇄ AI INTEGRATION 0x7F3A ◆ ').repeat(3);
+
+const gc=$('#grain'),gx=gc.getContext('2d');
+(function gr(){const im=gx.createImageData(256,256),d=im.data;for(let i=0;i<d.length;i+=4){const v=Math.random()*255|0;d[i]=d[i+1]=d[i+2]=v;d[i+3]=255}gx.putImageData(im,0,0);setTimeout(()=>requestAnimationFrame(gr),50)})();
+
+document.querySelectorAll('.tab').forEach(b=>b.onclick=()=>{document.querySelectorAll('.tab').forEach(z=>z.classList.toggle('on',z===b));document.querySelector('.face[data-t="'+b.dataset.t+'"]').click();});
+document.querySelectorAll('.face').forEach(f=>f.addEventListener('click',()=>document.querySelectorAll('.tab').forEach(z=>z.classList.toggle('on',z.dataset.t===f.dataset.t))));
+if(matchMedia('(orientation:portrait) and (max-width:900px)').matches){const n=document.getElementById('near'),l=document.getElementById('log');if(l)n.appendChild(l);}
+</script></body></html>
