@@ -13,6 +13,9 @@ A cyberpunk concept site on the theme of human and AI integration: the screen as
 - Portrait mobile layout with chat-style tabs
 - One self-contained `index.html`, no build, no frameworks
 
+## Case studies
+- [Retro terminal portal with an AI assistant](case-studies/terminal-portal.md)
+
 ## Run
 Open `index.html`, or serve it: `python3 -m http.server`.
 
